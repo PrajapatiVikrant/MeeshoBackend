@@ -6,7 +6,7 @@ const Order = {
   StoreOrder: async (req, res) => {
     try {
       console.log(req.body)
-      const data = new orderModel({MobileNO:"hello",Products:req.body.Products,Responses:{Seen:false,Confirmation:false,Ready:false,OutForDelivery:false,Complete:false}})
+      const data = new orderModel({MobileNO:req.body.MobileNO,Products:req.body.Products,Responses:{Seen:false,Confirmation:false,Ready:false,OutForDelivery:false,Complete:false}})
       await data.save();
       res.status(200).send("Orders have saved successfully");
     } catch (error) {

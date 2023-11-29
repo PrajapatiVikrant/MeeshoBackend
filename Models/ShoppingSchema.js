@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const ShoppingCart = new mongoose.Schema({
-   PhoneNo:{
+   MobilNo:{
     type:String,
     require:true
    },

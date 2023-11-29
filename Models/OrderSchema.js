@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const Order = mongoose.Schema({
     MobileNO:{
         type:String,
-        require:true 
+        require:true,
+      
     },
    Products:{
     type:Array,
@@ -13,7 +14,7 @@ const Order = mongoose.Schema({
    }
 })
 
-const orderModel = mongoose.model('order',Order);
+const orderModel = mongoose.model('myorder',Order);
 
 module.exports = orderModel;
 
