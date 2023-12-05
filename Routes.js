@@ -15,6 +15,9 @@ router.delete('/removeToCart',ShoppingCart.removeToCart)
 
 //Order
 router.post('/SaveOrder',Order.StoreOrder);
+router.put('/updateOrderResponse',Order.updateOrderResponse);
+router.get('/sendOrderResponse',Order.SendOrderResponse);
+
 
 
 module.exports = router;
