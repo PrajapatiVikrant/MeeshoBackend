@@ -7,10 +7,8 @@ app.use(bodyparser.json())
 app.use(cors())
 const PORT = process.env.PUBLIC_PORT || 5000;
 
-// app.use('/Meesho',require('./Routes'));
-app.get('/',(req,res)=>{
-    res.send('hello world')
-})
+app.use('/Meesho',require('./Routes'));
+
 
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
