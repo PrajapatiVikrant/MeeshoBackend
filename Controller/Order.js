@@ -6,10 +6,13 @@ const Order = {
   //Store api
   StoreOrder: async (req, res) => {
     try {
-      console.log(req.body);
+     
+     
+      const Products = JSON.parse(req.query.Products);
+     
       const data = new orderModel({
-        MobileNO: req.body.MobileNO,
-        Products: req.body.Products,
+        MobileNO: req.body.PhoneNO,
+        Products: Products,
         Responses: {
           Seen: false,
           Confirmation: false,
@@ -21,57 +24,90 @@ const Order = {
       await data.save();
       res.status(200).send("Orders have saved successfully");
     } catch (error) {
-      console.log(error);
+      
       res.status(500).send("server error");
     }
+  },
+
+
+  //Show all order
+  ShowOrder:async(req,res)=>{
+   const data = await orderModel.find({});
+  
+   res.json(data)
   },
 
   //Update order response
   updateOrderResponse: async (req, res) => {
     //Mobile,responseType
     try {
-      const data = await orderModel.findOne({ MobileNO: req.body.MobileNO });
+
+      const data = await orderModel.findOne({ MobileNO: req.params.MobileNO });
+      
       if (data) {
-        switch (req.body.responseType) {
+        switch (req.params.responseType) {
           case "Seen":
            
-            data.Responses.Seen = true;
+            if(data.Responses.Seen === true){
+              console.log('bhai ab false hoga')
+              data.Responses.Seen = false;
+            }else{
+              data.Responses.Seen = true;
+            }
           const result =  await orderModel.updateOne(
-              { MobileNO: req.body.MobileNO },
+              { MobileNO: req.params.MobileNO },
               { Responses: data.Responses }
             );
             console.log(result)
+           
             break;
           case "Confirmation":
-            data.Responses.Confirmation = true;
+            if(data.Responses.Confirmation === true){
+              data.Responses.Confirmation = false;
+            }else{
+              data.Responses.Confirmation = true;
+            }
             await orderModel.updateOne(
-              { MobileNO: req.body.MobileNO },
+              { MobileNO: req.params.MobileNO },
               { Responses: data.Responses }
             );
             break;
           case "Ready":
-            data.Responses.Ready = true;
-            await orderModel.updateOne(
-              { MobileNO: req.body.MobileNO },
+            if(data.Responses.Ready === true){
+              data.Responses.Ready = false;
+            }else{
+              data.Responses.Ready = true;
+            }
+           
+           const result1 = await orderModel.updateOne(
+              { MobileNO: req.params.MobileNO },
               { Responses: data.Responses }
             );
+            console.log(result1)
             break;
           case "OutForDelivery":
-            data.Responses.OutForDelivery = true;
+            if(data.Responses.OutForDelivery === true){
+              data.Responses.OutForDelivery = false;
+              console.log('Abi na nikla yha se maal leke')
+            }else{
+              data.Responses.OutForDelivery = true;
+            }
             await orderModel.updateOne(
-              { MobileNO: req.body.MobileNO },
+              { MobileNO: req.params.MobileNO },
               { Responses: data.Responses }
             );
             break;
           case "Complete":
-            await orderModel.deleteOne({ MobileNO: req.body.MobileNO });
+            await orderModel.deleteOne({ MobileNO: req.params.MobileNO });
             break;
           default:
             break;
         }
+        console.log('response updated')
         res.json({
           messege:"UpdateResponses"
         })
+        
       }
     } catch (error) {
       console.log(error);
@@ -80,9 +116,9 @@ const Order = {
 
   //Send order response api
   SendOrderResponse: async (req, res) => {
-    const data = await orderModel.findOne({MobileNO:req.query.MobileNO});
+    const data = await orderModel.findOne({MobileNO:req.body.PhoneNO});
     res.json({
-      Response:data.Responses
+      Responses:data.Responses
     })
   },
 
